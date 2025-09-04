@@ -30,7 +30,22 @@ export const Sidebar: React.FC = () => {
       {
         label: "Planejado",
         icon: "home",
-        path: "/frutas",
+        path: "/planejado",
+      },
+      {
+        label: "Atribuído a mim",
+        icon: "person",
+        path: "/atribuido",
+      },
+      {
+        label: "Minha semana",
+        icon: "week",
+        path: "/semana",
+      },
+      {
+        label: "Rotinas",
+        icon: "routines",
+        path: "/rotinas",
       },
       {
         label: "Importante",
@@ -38,31 +53,22 @@ export const Sidebar: React.FC = () => {
         path: "/importante",
       },
       {
-        label: "Atribuído a mim",
-        icon: "home",
-        path: "/teste",
-      },
-      {
         label: "Relatórios",
         icon: "stats",
         path: "/teste2",
       },
-      {
-        label: "Rotinas",
-        icon: "calendar",
-        path: "/todolist",
-      },
     ]);
   }, []);
+
   const listas = [
     {
       id: "1",
-      name: "Iguatemi",
+      name: "Operações da Loja",
       todos: Array(17).fill(0),
     },
-    { id: "2", name: "Lago Jacarey", todos: [] },
-    { id: "3", name: "Aeroporto", todos: Array(7).fill(0) },
-    { id: "4", name: "Aldeota", todos: Array(21).fill(0) },
+    { id: "2", name: "Marketing e Vendas", todos: [] },
+    { id: "3", name: "Financeiro", todos: Array(7).fill(0) },
+    { id: "4", name: "Recursos Humanos", todos: Array(21).fill(0) },
   ];
 
   return (
