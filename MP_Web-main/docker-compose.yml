@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mp_web_frontend
+    ports:
+      - "8080:80"
+    container_name: mp_frontend_container
