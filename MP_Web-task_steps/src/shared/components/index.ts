@@ -7,6 +7,7 @@ export * from "./taskbar/taskdescription";
 export * from "./taskbar/taskdoc";
 export * from "./taskbar/taskdeadline";
 export * from "./taskbar/taskmembers";
+export * from "./taskbar/taskhistory";
 export * from "./filterbar/filterbar";
 export * from "./searchfilter/searchfilter";
 export * from "./sidebar/sidebar";
