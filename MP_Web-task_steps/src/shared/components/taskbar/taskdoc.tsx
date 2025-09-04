@@ -11,6 +11,7 @@ import {
   ListItemIcon,
   ListItemText,
   TextField,
+  Typography,
 } from "@mui/material";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import LinkIcon from "@mui/icons-material/Link";
@@ -77,12 +78,13 @@ export const TaskDoc: React.FC = () => {
       </List>
 
       <Button
-        variant="outlined"
+        variant="contained"
+        color="inherit"
         fullWidth
         onClick={() => setDialogOpen(true)}
         startIcon={<AddIcon />}
       >
-        Anexar documento
+        <Typography>Anexar documento</Typography>
       </Button>
 
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} fullWidth>

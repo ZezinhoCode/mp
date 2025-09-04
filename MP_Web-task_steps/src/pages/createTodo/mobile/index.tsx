@@ -1,8 +1,8 @@
-import { Box, Container } from "@mui/material";
+import { Box, Dialog, TextField } from "@mui/material";
 import { useState } from "react";
-
-import { TaskDescription, TodoItem } from "../../shared/components/";
-import type { Itodo, Iuser } from "../../shared/interfaces";
+import { Calendar, StepsList, TaskDoc } from "../../../shared/components";
+import type { Iuser, Itodo } from "../../../shared/interfaces";
+import { AddMember } from "../../../shared/components/memberscomponents/addmember";
 
 const mockMembers: Iuser[] = [
   {
@@ -32,31 +32,40 @@ const initialTodo: Itodo = {
       id: "step1",
       title: "Apurar dados referente aos primeiros 3 meses de 2025",
       completed: false,
+      deadline: "2025-05-15",
+      responsible: "Maria Souza",
     },
     {
       id: "step2",
       title: "https://exemplo.com/AnaliseTrimestre2025.1",
       completed: false,
+      deadline: "2025-05-20",
+      responsible: "João Pereira",
     },
     {
       id: "step3",
       title: "Estruturar Power BI",
       completed: false,
+      deadline: "2025-06-05",
+      responsible: "Maria Souza",
     },
     {
       id: "step4",
       title: "Desenvolver apresentação no PowerPoint",
       completed: false,
+      deadline: "2025-06-10",
+      responsible: "João Pereira",
     },
   ],
   members: mockMembers,
 };
 
-export const TestComponents = () => {
+export const CreateMobileTodo = () => {
+  const [isOpen, setIsOpen] = useState(true);
   const [todo, setTodo] = useState<Itodo>(initialTodo);
 
-  const handleToggleFavorite = () => {
-    setTodo((prev) => ({ ...prev, isFavorite: !prev.isFavorite }));
+  const handleClose = () => {
+    setIsOpen(false);
   };
 
   const handleDone = () => {
@@ -80,22 +89,27 @@ export const TestComponents = () => {
     alert(`Tarefa ${todoId} apagada!`);
   };
 
+  const handleClick = () => {};
+
   return (
-    <Container>
-      <Box maxWidth={500} mx="auto">
-        <TaskDescription
-          todo={todo}
-          onToggleFavorite={handleToggleFavorite}
-          onToggleStep={handleToggleStep}
-          onFinish={handleFinish}
+    <Dialog onClose={handleClose} open={isOpen}>
+      <TextField disabled label="Criar nova tarefa"></TextField>
+      <Box p={2} display="flex" flexWrap="wrap">
+        <StepsList
+          onEdit={handleFinish}
           onDelete={handleDelete}
+          onToggle={handleToggleStep}
+          onAdd={handleDone}
+          steps={todo.steps}
         />
+        <Calendar />
+        <AddMember
+          members={mockMembers}
+          onClick={handleClick}
+          handleRemove={handleDelete}
+        />
+        <TaskDoc></TaskDoc>
       </Box>
-      <TodoItem
-        item={todo}
-        handleDone={handleDone}
-        handleFavorite={handleToggleFavorite}
-      ></TodoItem>
-    </Container>
+    </Dialog>
   );
 };

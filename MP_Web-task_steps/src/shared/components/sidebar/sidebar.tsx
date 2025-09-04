@@ -35,7 +35,7 @@ export const Sidebar: React.FC = () => {
       {
         label: "Importante",
         icon: "star",
-        path: "/cadastrar",
+        path: "/importante",
       },
       {
         label: "Atribuído a mim",

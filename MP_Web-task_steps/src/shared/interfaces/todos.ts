@@ -22,4 +22,6 @@ export interface Istep {
   id: string;
   title: string;
   completed: boolean;
+  deadline?: string;
+  responsible?: string;
 }

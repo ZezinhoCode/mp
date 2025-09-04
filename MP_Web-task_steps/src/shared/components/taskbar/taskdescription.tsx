@@ -43,7 +43,7 @@ export const TaskDescription: React.FC<TaskDescriptionProps> = ({
       </Box>
 
       <Typography variant="body2" color="gray" mb={1}>
-        Última alteração às{" "}
+        Última alteração às
         {format(new Date(todo.updatedAt), "HH:mm 'de' dd/MM/yyyy", {
           locale: ptBR,
         })}

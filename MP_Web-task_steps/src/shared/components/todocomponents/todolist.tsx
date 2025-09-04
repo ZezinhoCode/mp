@@ -7,12 +7,16 @@ interface ItodoListComponent {
   Items: Itodo[];
   handleDone: (id: string) => void;
   handleToggleFavorite: (id: string) => void;
+  isTodoSelected: string;
+  handleClick: (todo: Itodo) => void;
 }
 
 export const TodolistComponent: React.FC<ItodoListComponent> = ({
   Items,
   handleDone,
   handleToggleFavorite,
+  isTodoSelected,
+  handleClick,
 }) => {
   return (
     <Box>
@@ -36,6 +40,8 @@ export const TodolistComponent: React.FC<ItodoListComponent> = ({
       <List>
         {Items.map((item) => (
           <TodoItem
+            isSelecTed={isTodoSelected}
+            handleClick={handleClick}
             handleDone={handleDone}
             handleFavorite={handleToggleFavorite}
             key={item.id}

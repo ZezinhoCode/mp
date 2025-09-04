@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  ListItem,
   ListItemIcon,
   ListItemText,
   IconButton,
@@ -10,6 +9,7 @@ import {
   Box,
   Typography,
   Paper,
+  ListItemButton,
 } from "@mui/material";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
@@ -24,29 +24,26 @@ interface ItodoItem {
   item: Itodo;
   handleDone: (id: string) => void;
   handleFavorite: (id: string) => void;
+  handleClick: (todo: Itodo) => void;
+  isSelecTed: string;
 }
 
 export const TodoItem: React.FC<ItodoItem> = ({
   item,
   handleDone,
   handleFavorite,
+  handleClick,
+  isSelecTed,
 }) => {
   return (
     <Paper>
-      <ListItem
+      <ListItemButton
+        onClick={() => handleClick(item)}
+        selected={item.id === isSelecTed}
         sx={{
           borderRadius: 2,
           mb: 1,
         }}
-        secondaryAction={
-          <IconButton onClick={() => handleFavorite(item.id)}>
-            {item.isFavorite ? (
-              <StarIcon sx={{ color: "yellow" }} />
-            ) : (
-              <StarBorderIcon sx={{ color: "yellow" }} />
-            )}
-          </IconButton>
-        }
       >
         <ListItemIcon>
           <IconButton onClick={() => handleDone(item.id)}>
@@ -86,7 +83,7 @@ export const TodoItem: React.FC<ItodoItem> = ({
         />
 
         {item.members && item.members.length > 0 && (
-          <AvatarGroup max={4} sx={{ mr: 1 }}>
+          <AvatarGroup max={4}>
             {item.members.map((m) => (
               <Tooltip title={m.username} key={m.id}>
                 <Avatar sx={{ bgcolor: m.color, fontSize: 15 }}>
@@ -100,7 +97,16 @@ export const TodoItem: React.FC<ItodoItem> = ({
             ))}
           </AvatarGroup>
         )}
-      </ListItem>
+        <ListItemIcon>
+          <IconButton onClick={() => handleFavorite(item.id)}>
+            {item.isFavorite ? (
+              <StarIcon sx={{ color: "yellow" }} />
+            ) : (
+              <StarBorderIcon sx={{ color: "yellow" }} />
+            )}
+          </IconButton>
+        </ListItemIcon>
+      </ListItemButton>
     </Paper>
   );
 };

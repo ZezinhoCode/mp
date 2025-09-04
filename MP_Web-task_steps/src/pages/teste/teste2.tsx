@@ -2,7 +2,8 @@ import { Box } from "@mui/material";
 import { TodolistComponent } from "../../shared/components";
 import { BaseLayout } from "../../shared/layout";
 import type { Itodo, Iuser } from "../../shared/interfaces";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { Taskbar } from "../../shared/components/taskbar/taskbar";
 
 const mockMembers: Iuser[] = [
   {
@@ -10,6 +11,18 @@ const mockMembers: Iuser[] = [
     username: "Maria Souza",
     email: "maria@example.com",
     color: "#f48fb1",
+  },
+  {
+    id: "u2",
+    username: "João Pereira",
+    email: "joao@example.com",
+    color: "#81d4fa",
+  },
+  {
+    id: "u2",
+    username: "João Pereira",
+    email: "joao@example.com",
+    color: "#81d4fa",
   },
   {
     id: "u2",
@@ -102,14 +115,35 @@ export const Teste2 = () => {
   ];
 
   const statusList = ["Concluído", "Em andamento", "Pendente"];
+  const [selectedTodo, setSelectedTodo] = useState<Itodo | null>();
+  const [isSelecTed, setIsSelected] = useState("");
+  const [isModalOpen, setIsmodalOpen] = useState(false);
 
-  const handleToggleFavorite = (todoId: string) => {
-    setTodos((prev) =>
-      prev.map((todo) =>
-        todo.id === todoId ? { ...todo, isFavorite: !todo.isFavorite } : todo
-      )
-    );
-  };
+  const handleToggleFavorite = useCallback(
+    (todoId: string) => {
+      setTodos((prev) =>
+        prev.map((todo) =>
+          todo.id === todoId ? { ...todo, isFavorite: !todo.isFavorite } : todo
+        )
+      );
+    },
+    [todos]
+  );
+
+  const handleToggleStep = useCallback(
+    (stepId: string) => {
+      setSelectedTodo((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          steps: prev.steps.map((step) =>
+            step.id === stepId ? { ...step, completed: !step.completed } : step
+          ),
+        };
+      });
+    },
+    [selectedTodo]
+  );
 
   const handleDone = (todoId: string) => {
     setTodos((prev) =>
@@ -119,20 +153,57 @@ export const Teste2 = () => {
     );
   };
 
+  const handleRemoveMember = (userId: string) => {
+    console.log("membro removido");
+  };
+
+  const handleDelete = (todoId: string) => {};
+
+  const handleOpenModal = (todo: Itodo) => {
+    setIsSelected(todo.id);
+    setSelectedTodo(todo);
+    setIsmodalOpen(true);
+  };
+
+  const handleCloseModal = (todo: Itodo) => {
+    setIsSelected("");
+    setSelectedTodo(null);
+    setIsmodalOpen(false);
+  };
+
   return (
-    <Box ml={8} padding={3} maxWidth={900}>
-      <BaseLayout
-        title="Importante"
-        status={statusList}
-        filters={filters}
-        users={users}
-      >
-        <TodolistComponent
-          Items={todos}
-          handleDone={handleDone}
-          handleToggleFavorite={handleToggleFavorite}
-        />
-      </BaseLayout>
+    <Box ml={8} display="flex">
+      <Box flex={1} mr={2}>
+        <BaseLayout
+          title="Relatórios"
+          status={statusList}
+          filters={filters}
+          users={users}
+        >
+          <TodolistComponent
+            handleClick={handleOpenModal}
+            isTodoSelected={isSelecTed}
+            Items={todos}
+            handleDone={handleDone}
+            handleToggleFavorite={handleToggleFavorite}
+          />
+        </BaseLayout>
+      </Box>
+
+      {selectedTodo && (
+        <Box width="350px" overflow="hidden">
+          <Taskbar
+            onDelete={handleDelete}
+            handleRemoveMember={handleRemoveMember}
+            onToggleFavorite={handleToggleFavorite}
+            onToggleStep={handleToggleStep}
+            onFinish={handleDone}
+            todo={selectedTodo}
+            isOpen={isModalOpen}
+            onClose={() => handleCloseModal(selectedTodo)}
+          />
+        </Box>
+      )}
     </Box>
   );
 };

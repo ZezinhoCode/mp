@@ -1,5 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Login, Register, TestComponents, Teste2, TodoList } from "../pages";
+import {
+  CreateTodo,
+  Login,
+  Register,
+  TestComponents,
+  Teste2,
+  TodoList,
+} from "../pages";
 import { Sidebar } from "../shared/components";
 
 export const route = createBrowserRouter([
@@ -18,6 +25,10 @@ export const route = createBrowserRouter([
       {
         path: "/todolist",
         element: <TodoList></TodoList>,
+      },
+      {
+        path: "/importante",
+        element: <CreateTodo></CreateTodo>,
       },
     ],
   },

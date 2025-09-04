@@ -5,3 +5,4 @@ export * from "./cadastrar/index";
 export * from "./cadastrar/mobile/cadastrarmobile";
 export * from "./login/index";
 export * from "./todolist/desktop/index";
+export * from "./createTodo/desktop/index";
