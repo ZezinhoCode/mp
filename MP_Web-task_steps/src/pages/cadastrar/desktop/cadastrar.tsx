@@ -2,16 +2,13 @@ import {
   Box,
   Button,
   Container,
-  FormControl,
-  InputLabel,
-  MenuItem,
   Paper,
-  Select,
   Stack,
   TextField,
   Typography,
   useMediaQuery,
   useTheme,
+  Autocomplete,
 } from "@mui/material";
 import logo from "../../../assets/maria_pitanga.svg";
 import svgBackground from "../../../assets/background.svg";
@@ -22,6 +19,8 @@ export const DesktopRegister: React.FC = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const mdDown = useMediaQuery(theme.breakpoints.down("md"));
+
+  const unidades = [{ label: "Aldeota" }, { label: "Maraponga" }, { label: "Cambeba" }];
 
   return (
     <Box display="flex" height="100vh" width="100vw">
@@ -83,14 +82,16 @@ export const DesktopRegister: React.FC = () => {
                 variant="outlined"
               />
               <Typography>Unidade</Typography>
-              <FormControl fullWidth>
-                <InputLabel id="unidade-label">Selecione sua Unidade</InputLabel>
-                <Select labelId="unidade-label" label="Unidade">
-                  <MenuItem value={10}>Aldeota</MenuItem>
-                  <MenuItem value={20}>Maraponga</MenuItem>
-                  <MenuItem value={30}>Cambeba</MenuItem>
-                </Select>
-              </FormControl>
+              <Autocomplete
+                options={unidades}
+                fullWidth
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    placeholder="Selecione sua Unidade"
+                  />
+                )}
+              />
               <Typography>Senha</Typography>
               <TextField
                 type="password"

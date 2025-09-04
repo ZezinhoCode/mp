@@ -5,15 +5,14 @@ import {
   Typography,
   Stack,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Button,
+  Autocomplete,
 } from "@mui/material";
 import type React from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../../assets/maria_pitanga.svg";
+
+const unidades = [{ label: "Aldeota" }, { label: "Maraponga" }, { label: "Cambeba" }];
 
 export const MobileRegister: React.FC = () => {
   const navigate = useNavigate();
@@ -42,14 +41,12 @@ export const MobileRegister: React.FC = () => {
             <Typography>Celular</Typography>
             <TextField label="Celular" fullWidth />
             <Typography>Unidade</Typography>
-            <FormControl fullWidth>
-              <InputLabel id="unidade-label">Unidade</InputLabel>
-              <Select labelId="unidade-label" label="Unidade">
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-            </FormControl>
+            <Autocomplete
+              options={unidades}
+              fullWidth
+              renderInput={(params) => <TextField {...params} label="Unidade" />}
+            />
+
 
             <Stack mt={2} spacing={1}>
               <Button
