@@ -26,27 +26,46 @@ export const Calendar: React.FC = () => {
   };
 
   return (
-    <Paper sx={{ p: 2 }}>
+    <Paper sx={{ p: 2, bgcolor: '#2a2a2a', borderRadius: '8px' }}>
       {selectedDate && (
         <>
           <Box
             display="flex"
             alignItems="center"
             justifyContent="space-between"
-            sx={{ mb: 2, p: 1 }}
+            sx={{ mb: 2 }}
           >
-            <Typography variant="h6">
+            <Typography 
+              variant="h6"
+              sx={{ 
+                fontSize: '22px',
+                fontFamily: 'Roboto, sans-serif',
+                fontWeight: 600,
+                color: 'white'
+              }}
+            >
               {selectedDate.toLocaleDateString("pt-BR", {
                 day: "2-digit",
                 month: "2-digit",
                 year: "2-digit",
               })}
             </Typography>
-            <IconButton size="small">
-              <BorderColor />
+            <IconButton 
+              size="small"
+              sx={{ 
+                color: 'white',
+                border: '2.5px solid white',
+                borderRadius: '4px',
+                padding: '4px',
+                '&:hover': {
+                  bgcolor: 'rgba(255, 255, 255, 0.1)',
+                }
+              }}
+            >
+              <BorderColor fontSize="small" />
             </IconButton>
           </Box>
-          <Divider sx={{ mb: 1 }}></Divider>
+          <Divider sx={{ mb: 1.5, borderColor: 'white' }}></Divider>
         </>
       )}
 
@@ -57,11 +76,41 @@ export const Calendar: React.FC = () => {
         slots={{
           actionBar: () => null,
         }}
+        sx={{
+          '& .MuiPickersCalendarHeader-label': {
+            fontSize: '14px',
+            fontFamily: 'Roboto, sans-serif',
+            fontWeight: 500,
+            color: 'white',
+          },
+          '& .MuiDayCalendar-weekDayLabel': {
+            fontSize: '14px',
+            fontFamily: 'Roboto, sans-serif',
+            fontWeight: 400,
+            color: 'white',
+          },
+          '& .MuiPickersDay-root': {
+            fontSize: '14px',
+            fontFamily: 'Roboto, sans-serif',
+            fontWeight: 400,
+            color: 'white',
+          },
+          '& .MuiPickersDay-root.Mui-selected': {
+            bgcolor: '#454444',
+          },
+        }}
       />
 
       <Button
         variant="contained"
-        sx={{ mt: 2 }}
+        sx={{ 
+          mt: 1.5,
+          fontSize: '15px',
+          fontFamily: 'Roboto, sans-serif',
+          fontWeight: 400,
+          textTransform: 'none',
+          py: 0.8,
+        }}
         color="success"
         fullWidth
         onClick={handleConfirm}

@@ -23,6 +23,7 @@ interface StepsListProps {
   onDelete: (id: string) => void;
   onAdd: () => void;
   onToggle: (stepId: string) => void;
+  scale?: number; // Prop opcional para controle externo da escala
 }
 
 export const StepsList: React.FC<StepsListProps> = ({
@@ -31,8 +32,14 @@ export const StepsList: React.FC<StepsListProps> = ({
   onDelete,
   onAdd,
   onToggle,
+  scale = 0.8, // Valor padrão se não for passado via prop
 }) => {
   const [expandedStepId, setExpandedStepId] = useState<string | null>(null);
+
+  const SCALE = scale;
+
+  // Função helper para escalar valores
+  const s = (value: number) => value * SCALE;
 
   const toggleStep = (id: string) => {
     setExpandedStepId((prev) => (prev === id ? null : id));
@@ -41,43 +48,124 @@ export const StepsList: React.FC<StepsListProps> = ({
   const minTwoSteps = steps.length >= 2;
 
   return (
-    <Paper>
-      <Box p={2}>
-        <Typography fontWeight={700} mb={2}>
-          Defina as Etapas da Tarefa
-        </Typography>
+    // 1. O Paper principal é um contentor flex
+    <Paper
+      sx={{
+        p: s(0.1),
+        bgcolor: "#2a2a2a",
+        borderRadius: `${s(8)}px`,
+        // 2. MUDANÇA: 'height: 100%' foi trocado por 'maxHeight: 100%'
+        // Isso permite que o Paper encolha ao tamanho do conteúdo,
+        // mas não cresça mais que o espaço disponível.
+        maxHeight: "100%",
+        // 3. ADIÇÃO: Layout flex vertical para organizar topo, meio (scroll) e fundo.
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+      }}
+    >
+      {/* 4. O Box interno também precisa ser flex para preencher o Paper */}
+      <Box
+        p={s(1.5)}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          flexGrow: 1, // Permite que este Box cresça
+          minHeight: 0, // Necessário para o overflow funcionar
+        }}
+      >
+        {/* 5. TOPO (Título) - Fixo */}
+        <Box sx={{ flexShrink: 0 }}>
+          <Typography
+            fontWeight={400}
+            mb={s(1)}
+            sx={{
+              fontSize: `${s(24)}px`,
+              fontFamily: "Roboto, sans-serif",
+              color: "white",
+            }}
+          >
+            Defina as etapas da tarefa
+          </Typography>
+        </Box>
 
-        <Stack spacing={1}>
+        {/* 6. MEIO (Lista de Etapas) - Cresce e tem scroll */}
+        <Stack
+          spacing={s(1.5)}
+          sx={{
+            flexGrow: 1, // Faz a lista ocupar todo o espaço do meio
+            overflowY: "auto", // Adiciona scroll SÓ na lista
+            pr: s(0.5), // Espaço para a barra de scroll
+            mr: s(-0.5), // Compensa o padding
+          }}
+        >
           {steps.map((step, index) => (
-            <Paper key={step.id} sx={{ p: 1, borderRadius: 1 }}>
-              <Box display="flex" width="100%" alignItems="center">
-                <Typography mr={1}>{index + 1}°</Typography>
+            <Paper
+              key={step.id}
+              sx={{
+                p: s(1.5),
+                borderRadius: `${s(4)}px`,
+                bgcolor: "#323131",
+              }}
+            >
+              <Box display="flex" width="100%" alignItems="center" gap={s(0.5)}>
+                <Typography
+                  mr={s(0.5)}
+                  sx={{
+                    fontSize: `${s(17)}px`,
+                    fontFamily: "Inter, sans-serif",
+                    fontWeight: 600,
+                    color: "#5b5a5a",
+                  }}
+                >
+                  {index + 1}°
+                </Typography>
                 <FormControlLabel
                   sx={{
                     flex: 1,
-                    mr: 1,
+                    mr: s(1),
                   }}
                   control={
                     <Checkbox
-                      icon={<RadioButtonUncheckedIcon />}
-                      checkedIcon={<RadioButtonCheckedIcon />}
+                      icon={
+                        <RadioButtonUncheckedIcon
+                          sx={{ fontSize: `${s(24)}px` }}
+                        />
+                      }
+                      checkedIcon={
+                        <RadioButtonCheckedIcon
+                          sx={{ fontSize: `${s(24)}px` }}
+                        />
+                      }
                       onChange={() => onToggle(step.id)}
                       checked={step.completed}
                     />
                   }
                   label={
                     <Box>
-                      <Typography>{step.title}</Typography>
+                      <Typography
+                        sx={{
+                          fontSize: `${s(16)}px`,
+                          fontFamily: "Roboto, sans-serif",
+                          fontWeight: 300,
+                          color: "white",
+                        }}
+                      >
+                        {step.title}
+                      </Typography>
                     </Box>
                   }
                 ></FormControlLabel>
                 <IconButton
                   sx={{ ml: "auto" }}
                   onClick={() => toggleStep(step.id)}
-                  size="small"
+                  size={
+                    SCALE > 1.5 ? "large" : SCALE < 0.75 ? "small" : "medium"
+                  }
                 >
                   <ExpandMoreIcon
                     sx={{
+                      fontSize: `${s(24)}px`,
                       transform:
                         expandedStepId === step.id
                           ? "rotate(180deg)"
@@ -89,28 +177,77 @@ export const StepsList: React.FC<StepsListProps> = ({
               </Box>
 
               <Collapse in={expandedStepId === step.id}>
-                <Box mt={1} pl={2}>
+                <Box
+                  mt={s(1)}
+                  p={s(1)}
+                  sx={{
+                    bgcolor: "#464242",
+                    borderRadius: `${s(4)}px`,
+                  }}
+                >
                   {step.deadline && (
-                    <Typography variant="body2">
-                      Prazo:
-                      {format(new Date(step.deadline), "dd/MM/yyyy", {
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontSize: `${s(16)}px`,
+                        fontFamily: "Inter, sans-serif",
+                        fontWeight: 300,
+                        color: "white",
+                        mb: s(1),
+                      }}
+                    >
+                      Prazo:{" "}
+                      {format(new Date(step.deadline), "dd/MM/yy", {
                         locale: ptBR,
                       })}
                     </Typography>
                   )}
 
-                  <Typography variant="body2">
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontSize: `${s(16)}px`,
+                      fontFamily: "Inter, sans-serif",
+                      fontWeight: 300,
+                      color: "white",
+                      mb: s(1),
+                    }}
+                  >
                     Responsável: {step.responsible}
                   </Typography>
 
-                  <Stack direction="column" spacing={1} mt={1}>
-                    <Button variant="contained" onClick={() => onEdit(step.id)}>
-                      Editar etapa
+                  <Stack direction="column" spacing={s(1)} mt={s(1)}>
+                    <Button
+                      variant="text"
+                      onClick={() => onEdit(step.id)}
+                      sx={{
+                        justifyContent: "center",
+                        color: "white",
+                        fontSize: `${s(16)}px`,
+                        fontFamily: "Roboto, sans-serif",
+                        fontWeight: 400,
+                        textTransform: "none",
+                        py: s(0.5),
+                        px: s(1),
+                        "&:hover": {
+                          bgcolor: "rgba(255, 255, 255, 0.1)",
+                        },
+                      }}
+                    >
+                      Editar Etapa
                     </Button>
                     <Button
                       variant="contained"
                       color="error"
                       onClick={() => onDelete(step.id)}
+                      sx={{
+                        fontSize: `${s(16)}px`,
+                        fontFamily: "Roboto, sans-serif",
+                        fontWeight: 400,
+                        textTransform: "none",
+                        py: s(0.75),
+                        px: s(1.5),
+                      }}
                     >
                       Apagar etapa
                     </Button>
@@ -121,21 +258,41 @@ export const StepsList: React.FC<StepsListProps> = ({
           ))}
         </Stack>
 
-        {!minTwoSteps && (
-          <Typography color="error" mt={2}>
-            OBS: É necessário ao menos duas etapas para criar uma tarefa
-          </Typography>
-        )}
+        {/* 7. FUNDO (Aviso e Botão) - Fixo */}
+        <Box sx={{ flexShrink: 0, pt: s(1) }}>
+          {!minTwoSteps && (
+            <Typography
+              color="error"
+              mt={s(1)}
+              sx={{
+                fontSize: `${s(16)}px`,
+                fontFamily: "Inter, sans-serif",
+                fontWeight: 300,
+                textDecoration: "underline",
+                color: "#ef4949",
+              }}
+            >
+              OBS: É necessário ao menos duas etapas para criar uma tarefa
+            </Typography>
+          )}
 
-        <Button
-          fullWidth
-          sx={{ mt: 2 }}
-          variant="contained"
-          color="success"
-          onClick={onAdd}
-        >
-          Adicionar etapa
-        </Button>
+          <Button
+            fullWidth
+            sx={{
+              mt: s(1),
+              fontSize: `${s(17)}px`,
+              fontFamily: "Roboto, sans-serif",
+              fontWeight: 400,
+              textTransform: "none",
+              py: s(0.8),
+            }}
+            variant="contained"
+            color="success"
+            onClick={onAdd}
+          >
+            Adicionar etapa
+          </Button>
+        </Box>
       </Box>
     </Paper>
   );
