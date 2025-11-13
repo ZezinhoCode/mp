@@ -66,7 +66,9 @@ export const StepsList: React.FC<StepsListProps> = ({
     >
       {/* 4. O Box interno também precisa ser flex para preencher o Paper */}
       <Box
-        p={s(1.5)}
+          pt={s(1.5)} 
+          px={s(1.5)} 
+          pb={s(2)}
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -279,7 +281,7 @@ export const StepsList: React.FC<StepsListProps> = ({
           <Button
             fullWidth
             sx={{
-              mt: s(1),
+              mt: s(3.5),
               fontSize: `${s(17)}px`,
               fontFamily: "Roboto, sans-serif",
               fontWeight: 400,
