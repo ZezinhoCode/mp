@@ -7,12 +7,14 @@ import {
   IconButton,
   DialogTitle,
   Stack,
+  Paper,
+  Divider,
 } from "@mui/material";
 import { useState } from "react";
 import { Calendar, StepsList, TaskDoc } from "../../../shared/components";
 import type { Iuser, Itodo } from "../../../shared/interfaces";
 import { AddMember } from "../../../shared/components/memberscomponents/addmember";
-import { Close, Edit } from "@mui/icons-material";
+import { Close, Edit as EditIcon } from "@mui/icons-material";
 import { useTodoContext } from "../../../shared/contexts/todocontext";
 
 const mockMembers: Iuser[] = [
@@ -85,7 +87,7 @@ export const CreateTodo = () => {
       PaperProps={{
         sx: {
           width: '850px',
-          height: '650px',
+          height: '9650px',
           maxWidth: '95vw',
           bgcolor: '#222222',
           borderRadius: '8px',
@@ -97,106 +99,145 @@ export const CreateTodo = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "flex-end",
-          padding: "10px 18px",
+          padding: "4px 20px 2px 12px",
           minHeight: "auto",
         }}
       >
         <IconButton 
           onClick={handleCloseTodoPage}
+          size="small"
           sx={{ 
             color: 'white',
-            border: '3px solid white',
-            borderRadius: '4px',
             padding: '4px',
             '&:hover': {
               bgcolor: 'rgba(255, 255, 255, 0.1)',
             }
           }}
         >
-          <Close />
+          <Close fontSize="small" /> 
         </IconButton>
       </DialogTitle>
 
-      <Box sx={{ padding: "0 25px 25px 25px" }}>
-        <Stack spacing={2}>
-          <Stack spacing={1}>
+      <Box sx={{ 
+        paddingTop: 0,
+        paddingLeft: '20px',
+        paddingRight: '20px', 
+        paddingBottom: '20px',
+        height: 'calc(100% - 40px)',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative', // IMPORTANTE: Container precisa ser relative
+      }}>
+        <Stack spacing={1} sx={{ height: '100%' }}>
+          
+          <Paper
+            sx={{
+              py: 1.2,
+              px: 1.8,
+              bgcolor: "#2a2a2a",
+              borderRadius: '8px',
+              flexShrink: 0,
+            }}
+          >
             <Stack direction="row" alignItems="center" justifyContent="space-between">
               <TextField
                 fullWidth
                 placeholder="Criar nova tarefa"
                 variant="standard"
                 InputProps={{
-                  disableUnderline: false,
+                  disableUnderline: true,
                   sx: {
                     color: 'white',
-                    fontSize: '22px',
+                    fontSize: '20px',
                     fontFamily: 'Roboto, sans-serif',
                     fontWeight: 400,
-                    '&::before': {
-                      borderBottom: '1px solid white',
-                    },
-                    '&::after': {
-                      borderBottom: '1px solid white',
-                    },
                   }
                 }}
                 sx={{ 
                   flex: 1,
-                  mr: 2,
+                  mr: 1.5,
                 }}
               />
               <IconButton 
+                size="small"
                 sx={{ 
                   color: 'white',
-                  border: '2.5px solid white',
+                  border: '2px solid white',
                   borderRadius: '4px',
-                  padding: '4px',
+                  padding: '3px',
                   '&:hover': {
                     bgcolor: 'rgba(255, 255, 255, 0.1)',
                   }
                 }}
               >
-                <Edit fontSize="small" />
+                <EditIcon sx={{ fontSize: '18px' }} /> 
               </IconButton>
             </Stack>
-          </Stack>
-          <Grid container spacing={1.5}>
-            <Grid size={{ xs: 12, md: 6 }}>
-              <StepsList
-                onEdit={handleFinish}
-                onDelete={handleDelete}
-                onToggle={handleToggleStep}
-                onAdd={handleDone}
-                steps={todo.steps}
-              />
+            <Divider 
+              sx={{ 
+                borderColor: 'white',
+                mt: 0.8,
+              }} 
+            />
+          </Paper>
+          
+          {/* SOLUÇÃO: Remover gap e usar margem negativa */}
+          <Box sx={{ 
+            flexGrow: 1, 
+            display: 'flex', 
+            flexDirection: 'column',
+            // Removemos o gap e usamos margem negativa para "puxar" os componentes para cima
+            marginTop: '-8px' // Ajuste este valor conforme necessário
+          }}>
+            <Grid container spacing={1.5} sx={{ flexGrow: 1 }}>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <StepsList
+                  onEdit={handleFinish}
+                  onDelete={handleDelete}
+                  onToggle={handleToggleStep}
+                  onAdd={handleDone}
+                  steps={todo.steps}
+                />
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <Calendar />
+              </Grid>
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
-              <Calendar />
+            
+            <Grid container spacing={1.5} sx={{ 
+              flexGrow: 1,
+              // Adicionamos uma margem superior negativa para reduzir o espaço
+              marginTop: '-98px' // Ajuste este valor conforme necessário
+            }}>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <AddMember
+                  members={mockMembers}
+                  onClick={handleClick}
+                  handleRemove={handleDelete}
+                />
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <TaskDoc />
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid container spacing={1.5}>
-            <Grid size={{ xs: 12, md: 6 }}>
-              <AddMember
-                members={mockMembers}
-                onClick={handleClick}
-                handleRemove={handleDelete}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
-              <TaskDoc />
-            </Grid>
-          </Grid>
+          </Box>
+          
           <Button
             variant="contained"
             color="success"
             fullWidth
             onClick={() => alert("Atividade criada!")}
             sx={{
-              py: 1,
-              fontSize: '16px',
-              fontFamily: 'Roboto, sans-serif',
-              fontWeight: 400,
-              textTransform: 'none',
+              position: 'absolute', // Posicionamento absoluto
+            bottom: 20, // Distância do fundo - AJUSTE ESTE VALOR
+            left: 0,
+            right: 0,
+            py: 0.8,
+            fontSize: '16px',
+            fontFamily: 'Roboto, sans-serif',
+            fontWeight: 400,
+            textTransform: 'none',
+            zIndex: 10, // Garante que fica acima dos outros componentes
             }}
           >
             Criar atividade

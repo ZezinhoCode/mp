@@ -281,7 +281,7 @@ export const StepsList: React.FC<StepsListProps> = ({
           <Button
             fullWidth
             sx={{
-              mt: s(3.5),
+              mt: s(6.5),
               fontSize: `${s(17)}px`,
               fontFamily: "Roboto, sans-serif",
               fontWeight: 400,
